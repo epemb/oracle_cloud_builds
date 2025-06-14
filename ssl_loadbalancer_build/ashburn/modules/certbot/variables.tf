@@ -15,6 +15,7 @@ variable "default_certbot_info" {
     source_type         = string
     source_id           = string
     ssh_authorized_keys = string
+    user_data           = string
   })
   default = {
       availability_domain = ""
@@ -25,5 +26,6 @@ variable "default_certbot_info" {
       source_type         = ""
       source_id           = ""
       ssh_authorized_keys = ""
+      user_data           = ""
     }
 }

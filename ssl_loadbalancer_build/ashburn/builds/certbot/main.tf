@@ -14,7 +14,7 @@ data "oci_core_images" "oracle_linux" {
 }
 
 # Accesses the Public Subnet resource to reference subnet in Certbot instance
-data "oci_core_subnets" "pub_subnet" {
+data "oci_core_subnets" "mgmt_subnet" {
     compartment_id = data.hcp_vault_secrets_app.main_compartment_id.secrets["main_compartment_id"]
     display_name = "mgmt_subnet"
 }
@@ -28,10 +28,12 @@ module "certbot" {
       compartment_id      = data.hcp_vault_secrets_app.main_compartment_id.secrets["main_compartment_id"]
       display_name        = "Certbot"
       shape               = "VM.Standard.E2.1.Micro"
-      subnet_id           = data.oci_core_subnets.pub_subnet.subnets[0].id
+      subnet_id           = data.oci_core_subnets.mgmt_subnet.subnets[0].id
       source_type         = "image"
       source_id           = data.oci_core_images.oracle_linux.images[0].id
       ssh_authorized_keys = tls_private_key.certbot.public_key_openssh
+      user_data           = base64encode(file("${path.module}/startup.sh"))
+
     }
   ]
 }

@@ -9,7 +9,7 @@ resource "oci_core_instance" "this" {
 
   create_vnic_details {
     subnet_id        = each.value.subnet_id
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   source_details {
@@ -19,5 +19,6 @@ resource "oci_core_instance" "this" {
 
   metadata = {
     ssh_authorized_keys = each.value.ssh_authorized_keys
+    user_data           = each.value.user_data
   }
 }

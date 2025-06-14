@@ -28,6 +28,24 @@ module "priv_subnets" {
 
 }
 
+resource "oci_core_route_table" "mgmt_subnet_rt" {
+    compartment_id = data.hcp_vault_secrets_app.main_compartment_id.secrets["main_compartment_id"]
+    vcn_id = module.vcn.vcn_id
+    display_name = "Default Route Table for mgmt-subnet"
+
+    route_rules {
+        network_entity_id = oci_core_nat_gateway.hub_ngw.id
+        description = "Forwards packets in mgmt subnet to ngw."
+        destination = "0.0.0.0/0"
+        destination_type = "CIDR_BLOCK"
+    }
+}
+
+resource "oci_core_route_table_attachment" "test_route_table_attachment" {
+  subnet_id = module.priv_subnets.id["mgmt_subnet"]
+  route_table_id = oci_core_route_table.mgmt_subnet_rt.id
+}
+
 resource "oci_load_balancer_load_balancer" "pub_lb" {
     compartment_id = data.hcp_vault_secrets_app.main_compartment_id.secrets["main_compartment_id"]
     display_name = "pub_lb"
@@ -55,4 +73,10 @@ resource "oci_dns_rrset" "test_rrset" {
         rtype = "A"
         ttl = 3600
     }
+}
+
+resource "oci_core_nat_gateway" "hub_ngw" {
+    compartment_id = data.hcp_vault_secrets_app.main_compartment_id.secrets["main_compartment_id"]
+    vcn_id = module.vcn.vcn_id
+    display_name = "hub_ngw"
 }
