@@ -16,7 +16,7 @@ data "oci_core_images" "oracle_linux" {
 # Accesses the Public Subnet resource to reference subnet in Certbot instance
 data "oci_core_subnets" "pub_subnet" {
     compartment_id = data.hcp_vault_secrets_app.main_compartment_id.secrets["main_compartment_id"]
-    display_name = "pub_subnet"
+    display_name = "mgmt_subnet"
 }
 
 module "certbot" {
