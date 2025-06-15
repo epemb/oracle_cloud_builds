@@ -35,7 +35,7 @@ resource "oci_core_route_table" "mgmt_subnet_rt" {
 
     route_rules {
         network_entity_id = oci_load_balancer_load_balancer.pub_lb.id
-        description = "Forwards packets in mgmt subnet to ngw."
+        description = "Forwards packets in mgmt subnet to Public load balancer."
         destination = "0.0.0.0/0"
         destination_type = "CIDR_BLOCK"
     }
