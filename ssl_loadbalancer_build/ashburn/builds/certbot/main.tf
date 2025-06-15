@@ -27,7 +27,7 @@ module "certbot" {
       availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
       compartment_id      = data.hcp_vault_secrets_app.main_compartment_id.secrets["main_compartment_id"]
       display_name        = "Certbot"
-      shape               = "VM.Standard.E2.1.Micro"
+      shape               = "VM.Standard.E2.1"
       subnet_id           = data.oci_core_subnets.mgmt_subnet.subnets[0].id
       source_type         = "image"
       source_id           = data.oci_core_images.oracle_linux.images[0].id
@@ -44,6 +44,7 @@ resource "tls_private_key" "certbot" {
   rsa_bits  = 2048
 }
 
+# Saves private key locally in filename path
 resource "local_file" "certbot_private_key" {
   content         = tls_private_key.certbot.private_key_pem
   filename        = "/Users/epemb/Programming/Priv_keys/cerbot_keys/certbot_id_rsa"

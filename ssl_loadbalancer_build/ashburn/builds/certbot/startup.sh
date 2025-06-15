@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install snap
+sudo yum install snap
+
 # Install Certbot
 sudo snap install --classic certbot
 
